@@ -1,0 +1,125 @@
+/* Centre modal shell shared by the category, stock-adjust and log-request dialogs. */
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  background: rgba(16, 24, 40, 0.45);
+  display: flex;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 24px 12px;
+}
+
+.panel {
+  width: 100%;
+  margin: auto 0;
+  background: var(--surface);
+  border-radius: 16px;
+  box-shadow: 0 24px 64px rgba(16, 24, 40, 0.25);
+  display: flex;
+  flex-direction: column;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--line-section);
+}
+
+.title {
+  margin: 0;
+  flex: 1;
+  font-weight: 700;
+  font-size: 19px;
+  letter-spacing: -0.015em;
+}
+
+.close {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: var(--r);
+  background: none;
+  font-size: 22px;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: background-color var(--t);
+}
+.close:hover {
+  background: var(--surface-sunken-2);
+}
+
+.body {
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 16px 22px;
+  border-top: 1px solid var(--line-section);
+  background: var(--surface-muted);
+  border-radius: 0 0 16px 16px;
+}
+
+.cancel {
+  height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--t);
+}
+.cancel:hover {
+  background: var(--surface-sunken);
+}
+
+.confirm {
+  height: 40px;
+  padding: 0 18px;
+  border: none;
+  border-radius: var(--r);
+  background: var(--gold);
+  color: var(--surface);
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--t);
+}
+.confirm:hover {
+  background: var(--gold-hover);
+}
+
+.error {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: var(--r);
+  background: var(--red-bg);
+  color: var(--red-line);
+  font-size: 13.5px;
+}
+
+.fieldLabel {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink-3);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

@@ -1,0 +1,324 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: ajfade 0.35s var(--ease-soft) both;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line-card);
+  border-radius: var(--r);
+  box-shadow: var(--sh-card);
+  padding: 14px 16px;
+  display: grid;
+  gap: 14px 20px;
+  align-items: center;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.arrows {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.arrow {
+  width: 26px;
+  height: 22px;
+  border: none;
+  border-radius: 4px;
+  background: none;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: background-color var(--t);
+}
+.arrow:hover {
+  background: var(--surface-sunken-2);
+}
+.arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.avatar {
+  flex: none;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+}
+
+.titleStack {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.35;
+}
+
+.name {
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.meta {
+  font-size: 12.5px;
+  color: var(--ink-muted);
+}
+
+.subs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+}
+
+.sub {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 14px;
+  background: var(--surface-sunken-2);
+  font-size: 13px;
+}
+
+.subCount {
+  font-size: 11.5px;
+  color: var(--ink-muted);
+}
+
+.noSubs {
+  font-size: 13px;
+  color: var(--ink-faint);
+}
+
+.pairs {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.4;
+  min-width: 0;
+}
+
+.pairsLabel {
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.pairsValue {
+  font-size: 13.5px;
+}
+
+.actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.btn {
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color var(--t), color var(--t);
+}
+.btn:hover {
+  background: var(--surface-sunken);
+}
+
+.edit {
+  composes: btn;
+  color: var(--gold);
+  font-weight: 500;
+}
+.edit:hover {
+  background: var(--gold-tint);
+}
+
+.iconBtn {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--surface);
+  color: var(--ink-3);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background-color var(--t), color var(--t);
+}
+.iconBtn:hover {
+  background: var(--gold-tint);
+  color: var(--gold);
+}
+
+.hint {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+
+/* Modal bits */
+.two {
+  display: grid;
+  gap: 14px;
+}
+
+.imageRow {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.imagePreview {
+  flex: none;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background-color: var(--line-row-2);
+  background-size: cover;
+  background-position: center;
+}
+
+.imageSide {
+  flex: 1 1 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.note {
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+
+.fileRow {
+  display: flex;
+  gap: 8px;
+}
+
+.upload {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--surface);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.file {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.removeImg {
+  height: 34px;
+  padding: 0 10px;
+  border: none;
+  background: none;
+  color: var(--gold);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.tints {
+  display: flex;
+  gap: 10px;
+}
+
+.tint {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--surface);
+  cursor: pointer;
+}
+
+.subRow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.subInput {
+  flex: 1;
+  min-width: 0;
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  font-size: 14px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color var(--t), box-shadow var(--t);
+}
+.subInput:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(168, 130, 47, 0.16);
+}
+
+.subNum {
+  flex: none;
+  width: 84px;
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+.removeSub {
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: var(--r-sm);
+  background: none;
+  color: var(--ink-muted);
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color var(--t), color var(--t);
+}
+.removeSub:hover {
+  background: var(--gold-tint);
+  color: var(--gold);
+}
+
+.addSub {
+  align-self: flex-start;
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.chipWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}

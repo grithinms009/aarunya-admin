@@ -5,6 +5,8 @@ import { LoginPage } from '@/features/auth/LoginPage';
 import { DashboardPage } from '@/features/dashboard/DashboardPage';
 import { ProductsPage } from '@/features/products/ProductsPage';
 import { ProductEditor } from '@/features/products/ProductEditor';
+import { CategoriesPage } from '@/features/categories/CategoriesPage';
+import { InventoryPage } from '@/features/inventory/InventoryPage';
 import { Placeholder } from '@/app/Placeholder';
 import { RequireAuth } from '@/app/RequireAuth';
 import { useAuth } from '@/store/useAuth';
@@ -61,24 +63,8 @@ export default function App() {
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/products/new" element={<ProductEditor />} />
         <Route path="/products/:id" element={<ProductEditor />} />
-        <Route
-          path="/categories"
-          element={
-            <Placeholder
-              title="Categories"
-              sub="Shown in the shop menu, filters and “Pair it up” suggestions."
-            />
-          }
-        />
-        <Route
-          path="/inventory"
-          element={
-            <Placeholder
-              title="Inventory"
-              sub="Stock for every colour, with a record of every change."
-            />
-          }
-        />
+        <Route path="/categories" element={<CategoriesPage />} />
+        <Route path="/inventory" element={<InventoryPage />} />
         <Route
           path="/storefront"
           element={

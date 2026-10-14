@@ -19,3 +19,14 @@ export {
   type StockFilter,
 } from './products';
 export { media, type DescriptionInput, type GeneratedLook } from './media';
+export { ConflictError, categories, type CategoryDraft } from './categories';
+export {
+  ADJUST_REASONS,
+  inventory,
+  type AdjustMode,
+  type AdjustReason,
+  type InventorySummary,
+  type LedgerQuery,
+  type StockQuery,
+  type StockRow,
+} from './inventory';
