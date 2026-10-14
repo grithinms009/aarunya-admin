@@ -9,6 +9,7 @@ import { CategoriesPage } from '@/features/categories/CategoriesPage';
 import { InventoryPage } from '@/features/inventory/InventoryPage';
 import { OrdersPage } from '@/features/orders/OrdersPage';
 import { PosPage } from '@/features/pos/PosPage';
+import { ReturnsPage } from '@/features/returns/ReturnsPage';
 import { Placeholder } from '@/app/Placeholder';
 import { RequireAuth } from '@/app/RequireAuth';
 import { useAuth } from '@/store/useAuth';
@@ -40,14 +41,8 @@ export default function App() {
         <Route path="/orders" element={<OrdersPage />} />
         <Route path="/orders/:orderNo" element={<OrdersPage />} />
         <Route path="/pos" element={<PosPage />} />
-        <Route
-          path="/returns"
-          element={<Placeholder title="Returns & exchanges" sub="Requests from customers." />}
-        />
-        <Route
-          path="/returns/:returnNo"
-          element={<Placeholder title="Returns & exchanges" sub="Requests from customers." />}
-        />
+        <Route path="/returns" element={<ReturnsPage />} />
+        <Route path="/returns/:returnNo" element={<ReturnsPage />} />
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/products/new" element={<ProductEditor />} />
         <Route path="/products/:id" element={<ProductEditor />} />

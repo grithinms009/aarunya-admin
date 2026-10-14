@@ -39,3 +39,14 @@ export {
   type OrderListResult,
   type OrderQuery,
 } from './orders';
+export {
+  RETURN_REASONS,
+  RETURN_STEPS,
+  ReturnRuleError,
+  eligibility,
+  returns,
+  type Eligibility,
+  type ReturnListResult,
+  type ReturnQuery,
+  type ReturnTab,
+} from './returns';
