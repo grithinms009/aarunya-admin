@@ -137,6 +137,18 @@
   background: var(--surface);
   color: var(--ink);
 }
+.itemOn {
+  background: var(--surface);
+  box-shadow: var(--sh-nav-active);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.item {
+  color: var(--ink-3);
+  font-weight: 500;
+}
+
 .item span.label {
   flex: 1;
   min-width: 0;

@@ -10,7 +10,9 @@ import { InventoryPage } from '@/features/inventory/InventoryPage';
 import { OrdersPage } from '@/features/orders/OrdersPage';
 import { PosPage } from '@/features/pos/PosPage';
 import { ReturnsPage } from '@/features/returns/ReturnsPage';
-import { Placeholder } from '@/app/Placeholder';
+import { StorefrontPage } from '@/features/storefront/StorefrontPage';
+import { CustomersPage } from '@/features/customers/CustomersPage';
+import { SettingsPage } from '@/features/settings/SettingsPage';
 import { RequireAuth } from '@/app/RequireAuth';
 import { useAuth } from '@/store/useAuth';
 
@@ -48,33 +50,9 @@ export default function App() {
         <Route path="/products/:id" element={<ProductEditor />} />
         <Route path="/categories" element={<CategoriesPage />} />
         <Route path="/inventory" element={<InventoryPage />} />
-        <Route
-          path="/storefront"
-          element={
-            <Placeholder
-              title="Banners & homepage"
-              sub="Images and messages on the store home page."
-            />
-          }
-        />
-        <Route
-          path="/customers"
-          element={
-            <Placeholder
-              title="Customers"
-              sub="Everyone who has ordered online or bought in person."
-            />
-          }
-        />
-        <Route
-          path="/settings"
-          element={
-            <Placeholder
-              title="Settings"
-              sub="Store details, shipping, tracking, colours and your login."
-            />
-          }
-        />
+        <Route path="/storefront" element={<StorefrontPage />} />
+        <Route path="/customers" element={<CustomersPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Route>
     </Routes>

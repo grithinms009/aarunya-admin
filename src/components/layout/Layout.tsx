@@ -128,7 +128,11 @@ export function Layout() {
                 {g.items.map(([key, label]) => {
                   const n = badges?.[key as BadgeKey] ?? 0;
                   return (
-                    <NavLink key={key} to={`/${key}`} className={s.item}>
+                    <NavLink
+                      key={key}
+                      to={`/${key}`}
+                      className={({ isActive }) => `${s.item} ${isActive ? s.itemOn : ''}`}
+                    >
                       {({ isActive }) => (
                         <>
                           <Icon
