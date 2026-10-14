@@ -1,0 +1,88 @@
+/* Pill, segmented control, chip and switch — the four controls the prototype reuses
+   on nearly every screen. */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 9px;
+  border-radius: 11px;
+  font-size: 11.5px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.segGroup {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+
+.segBtn {
+  height: 30px;
+  padding: 0 14px;
+  border: none;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--ink-3);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--t), color var(--t);
+}
+.segBtnOn {
+  background: var(--ink);
+  color: var(--surface);
+}
+
+.chip {
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-2);
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--t), color var(--t), border-color var(--t);
+}
+.chipOn {
+  border-color: var(--gold);
+  background: var(--gold);
+  color: var(--surface);
+}
+
+.switch {
+  flex: none;
+  position: relative;
+  width: 40px;
+  height: 24px;
+  border-radius: var(--r-lg);
+  border: none;
+  background: var(--line-toggle);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.switchOn {
+  background: var(--gold);
+}
+.knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+}
+.knobOn {
+  transform: translateX(16px);
+}

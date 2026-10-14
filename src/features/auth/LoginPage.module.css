@@ -1,0 +1,167 @@
+.screen {
+  min-height: 100vh;
+  display: grid;
+}
+
+.brand {
+  background: var(--gold-tint);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 48px;
+}
+
+.brandLogo {
+  display: block;
+  width: min(320px, 70%);
+  height: auto;
+}
+
+.tagline {
+  margin: 0;
+  max-width: 28ch;
+  text-align: center;
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.45;
+  color: var(--ink-3);
+}
+
+.panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 20px;
+  background: var(--surface);
+}
+
+.col {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.eyebrow {
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-hover);
+}
+
+.h1 {
+  margin: 0;
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+.h1Reset {
+  composes: h1;
+  font-size: 26px;
+}
+
+.lede {
+  margin: 0;
+  color: var(--ink-muted);
+}
+
+/* Login's fields are the taller variant: 46px and 15px, with a slightly stronger ring. */
+.input {
+  height: 46px;
+  width: 100%;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--surface);
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--ink);
+  outline: none;
+  transition: border-color var(--t), box-shadow var(--t);
+}
+.input:focus {
+  border-color: var(--gold);
+  box-shadow: var(--sh-focus);
+}
+
+.passWrap {
+  position: relative;
+  display: block;
+}
+
+.passInput {
+  composes: input;
+  padding: 0 64px 0 12px;
+}
+
+.reveal {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  height: 38px;
+  padding: 0 12px;
+  border: none;
+  background: none;
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.error {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: var(--r);
+  background: var(--gold-tint);
+  color: var(--gold);
+  font-size: 13.5px;
+}
+
+.submit {
+  height: 48px;
+  border: none;
+  border-radius: var(--r);
+  background: var(--gold);
+  color: var(--surface);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background-color var(--t);
+}
+.submit:hover {
+  background: var(--gold-hover);
+}
+.submit:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.link {
+  align-self: center;
+  border: none;
+  background: none;
+  color: var(--gold);
+  font-size: 13.5px;
+  cursor: pointer;
+  padding: 6px;
+}
