@@ -7,6 +7,8 @@ import { ProductsPage } from '@/features/products/ProductsPage';
 import { ProductEditor } from '@/features/products/ProductEditor';
 import { CategoriesPage } from '@/features/categories/CategoriesPage';
 import { InventoryPage } from '@/features/inventory/InventoryPage';
+import { OrdersPage } from '@/features/orders/OrdersPage';
+import { PosPage } from '@/features/pos/PosPage';
 import { Placeholder } from '@/app/Placeholder';
 import { RequireAuth } from '@/app/RequireAuth';
 import { useAuth } from '@/store/useAuth';
@@ -35,23 +37,9 @@ export default function App() {
       >
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<DashboardPage />} />
-        <Route
-          path="/orders"
-          element={<Placeholder title="Orders" sub="Online and offline sales in one place." />}
-        />
-        <Route
-          path="/orders/:orderNo"
-          element={<Placeholder title="Orders" sub="Online and offline sales in one place." />}
-        />
-        <Route
-          path="/pos"
-          element={
-            <Placeholder
-              title="Offline sale"
-              sub="Record a sale made in person. Stock updates as soon as you save."
-            />
-          }
-        />
+        <Route path="/orders" element={<OrdersPage />} />
+        <Route path="/orders/:orderNo" element={<OrdersPage />} />
+        <Route path="/pos" element={<PosPage />} />
         <Route
           path="/returns"
           element={<Placeholder title="Returns & exchanges" sub="Requests from customers." />}

@@ -1,8 +1,8 @@
 import { create } from 'zustand';
+import type { DateRange } from '@/api';
 import type { Channel, OrderStatus, PaymentStatus } from '@/data/types';
 
 export type ChannelFilter = 'all' | Channel;
-export type DateRange = 'today' | '7' | '30' | '90' | 'all' | 'custom';
 
 export interface OrderFilters {
   ch: ChannelFilter;
