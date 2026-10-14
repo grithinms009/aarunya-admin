@@ -3,6 +3,8 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { LoginPage } from '@/features/auth/LoginPage';
 import { DashboardPage } from '@/features/dashboard/DashboardPage';
+import { ProductsPage } from '@/features/products/ProductsPage';
+import { ProductEditor } from '@/features/products/ProductEditor';
 import { Placeholder } from '@/app/Placeholder';
 import { RequireAuth } from '@/app/RequireAuth';
 import { useAuth } from '@/store/useAuth';
@@ -56,9 +58,9 @@ export default function App() {
           path="/returns/:returnNo"
           element={<Placeholder title="Returns & exchanges" sub="Requests from customers." />}
         />
-        <Route path="/products" element={<Placeholder title="Products" sub="Your catalogue." />} />
-        <Route path="/products/new" element={<Placeholder title="Add product" sub="" />} />
-        <Route path="/products/:id" element={<Placeholder title="Product" sub="" />} />
+        <Route path="/products" element={<ProductsPage />} />
+        <Route path="/products/new" element={<ProductEditor />} />
+        <Route path="/products/:id" element={<ProductEditor />} />
         <Route
           path="/categories"
           element={

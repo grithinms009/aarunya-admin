@@ -1,0 +1,68 @@
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(16, 24, 40, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.box {
+  width: 100%;
+  max-width: 420px;
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 24px 64px rgba(16, 24, 40, 0.25);
+}
+
+.title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.text {
+  margin: 0;
+  color: var(--ink-3);
+}
+
+.row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.keep {
+  height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.go {
+  height: 40px;
+  padding: 0 16px;
+  border: none;
+  border-radius: var(--r);
+  background: var(--gold);
+  color: var(--surface);
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--t);
+}
+.go:hover {
+  background: var(--gold-hover);
+}

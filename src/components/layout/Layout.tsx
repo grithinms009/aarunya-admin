@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { meta } from '@/api';
 import { Icon, NAV_ICON, PATH } from '@/components/ui/icons';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Toast } from '@/components/ui/Toast';
 import { useViewport } from '@/hooks/useViewport';
 import { useAuth } from '@/store/useAuth';
@@ -185,6 +186,7 @@ export function Layout() {
         </main>
       </div>
 
+      <ConfirmDialog />
       <Toast />
     </div>
   );

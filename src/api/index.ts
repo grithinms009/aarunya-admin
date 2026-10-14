@@ -9,3 +9,13 @@ export {
   type Period,
   type TopSeller,
 } from './dashboard';
+export {
+  ValidationError,
+  products,
+  type ProductFlag,
+  type ProductListResult,
+  type ProductQuery,
+  type ProductSort,
+  type StockFilter,
+} from './products';
+export { media, type DescriptionInput, type GeneratedLook } from './media';
