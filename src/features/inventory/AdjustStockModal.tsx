@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { ADJUST_REASONS, inventory, type AdjustMode, type AdjustReason, type StockRow } from '@/api';
+import { inventory, type AdjustMode, type AdjustReason, type StockRow } from '@/api';
+import { useReference } from '@/hooks/useReference';
 import { Modal } from '@/components/ui/Modal';
 import { useUi } from '@/store/useUi';
 import f from '@/styles/form.module.css';
@@ -20,6 +21,7 @@ interface Props {
 
 export function AdjustStockModal({ row, colorLabel, onClose, onSaved }: Props) {
   const flash = useUi((st) => st.flash);
+  const { adjustReasons } = useReference();
   const [mode, setMode] = useState<AdjustMode>('add');
   const [qty, setQty] = useState('');
   const [reason, setReason] = useState<AdjustReason>('restock');
@@ -90,7 +92,7 @@ export function AdjustStockModal({ row, colorLabel, onClose, onSaved }: Props) {
             className={f.select}
             style={{ height: 42 }}
           >
-            {ADJUST_REASONS.map(([v, l]) => (
+            {adjustReasons.map(([v, l]) => (
               <option key={v} value={v}>
                 {l}
               </option>

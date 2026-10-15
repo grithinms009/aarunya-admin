@@ -9,9 +9,9 @@ import f from '@/styles/form.module.css';
 import m from '@/components/ui/Modal.module.css';
 import s from './CategoriesPage.module.css';
 import type { Category } from '@/data/types';
+import { useReference } from '@/hooks/useReference';
 
 /** The five background tints offered for a category card. */
-const TINTS = ['#F7E4E4', '#F5ECDD', '#F3E1D7', '#E8EFE6', '#ECE8F3'];
 
 interface Props {
   /** null means "add a new category". */
@@ -23,12 +23,15 @@ interface Props {
 }
 
 export function CategoryModal({ category, all, counts, onClose, onSaved }: Props) {
+  const { categoryTints } = useReference();
   const isNew = !category;
   const flash = useUi((st) => st.flash);
 
   const [name, setName] = useState(category?.name ?? '');
   const [short, setShort] = useState(category?.short ?? '');
-  const [tint, setTint] = useState(category?.tint ?? TINTS[0]);
+  const [tint, setTint] = useState(category?.tint ?? '');
+  /* A new category takes the first tint until one is picked. */
+  const activeTint = tint || categoryTints[0] || '';
   const [image, setImage] = useState(category?.image ?? '');
   const [subs, setSubs] = useState(structuredClone(category?.subs ?? []));
   const [pairs, setPairs] = useState<string[]>([...(category?.pairs ?? [])]);
@@ -60,7 +63,7 @@ export function CategoryModal({ category, all, counts, onClose, onSaved }: Props
         slug: category?.slug ?? '',
         name,
         short,
-        tint,
+        tint: activeTint,
         image,
         subs,
         pairs,
@@ -149,17 +152,17 @@ export function CategoryModal({ category, all, counts, onClose, onSaved }: Props
       <div className={m.group}>
         <span className={m.fieldLabel}>Background tint</span>
         <div className={s.tints}>
-          {TINTS.map((hex) => (
+          {categoryTints.map((hex) => (
             <button
               key={hex}
               type="button"
               aria-label={`Tint ${hex}`}
-              aria-pressed={tint === hex}
+              aria-pressed={activeTint === hex}
               onClick={() => setTint(hex)}
               className={s.tint}
               style={{
                 background: hex,
-                boxShadow: `0 0 0 2px ${tint === hex ? 'var(--ink)' : 'rgba(16,24,40,.12)'}`,
+                boxShadow: `0 0 0 2px ${activeTint === hex ? 'var(--ink)' : 'rgba(16,24,40,.12)'}`,
               }}
             />
           ))}

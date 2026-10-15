@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
-  RETURN_STEPS,
   ReturnRuleError,
   meta,
   products,
   returns,
 } from '@/api';
+import { useReference } from '@/hooks/useReference';
 import { Drawer, Steps, buildSteps } from '@/components/ui/Drawer';
 import { Switch } from '@/components/ui/controls';
 import { RETURN_STATUS, RETURN_TYPE } from '@/lib/badges';
@@ -18,9 +18,8 @@ import d from '@/components/ui/Drawer.module.css';
 import s from './ReturnsPage.module.css';
 import type { ReturnType } from '@/data/types';
 
-const REFUND_METHODS = ['Original payment method', 'UPI', 'Bank transfer', 'Store credit'];
-
 export function ReturnDrawer({ returnNo }: { returnNo: string }) {
+  const { returnSteps, refundMethods } = useReference();
   const navigate = useNavigate();
   const qc = useQueryClient();
   const flash = useUi((st) => st.flash);
@@ -46,7 +45,9 @@ export function ReturnDrawer({ returnNo }: { returnNo: string }) {
   const [vid, setVid] = useState('');
   const [awb, setAwb] = useState('');
   const [amount, setAmount] = useState('');
-  const [method, setMethod] = useState(REFUND_METHODS[0]);
+  const [method, setMethod] = useState('');
+  /* Falls back to the first option until one is chosen. */
+  const refundMethod = method || refundMethods[0] || '';
 
   /* Seed the action fields from the request when it loads. */
   useEffect(() => {
@@ -145,7 +146,7 @@ export function ReturnDrawer({ returnNo }: { returnNo: string }) {
     >
       {request.status !== 'rejected' && (
         <Steps
-          steps={buildSteps(RETURN_STEPS, request.status, request.history).map((st) => ({
+          steps={buildSteps(returnSteps, request.status, request.history).map((st) => ({
             ...st,
             at: st.at ? fDT(st.at) : '',
           }))}
@@ -405,11 +406,11 @@ export function ReturnDrawer({ returnNo }: { returnNo: string }) {
                 </label>
                 <select
                   aria-label="Refund method"
-                  value={method}
+                  value={refundMethod}
                   onChange={(ev) => setMethod(ev.target.value)}
                   className={f.select}
                 >
-                  {REFUND_METHODS.map((m) => (
+                  {refundMethods.map((m) => (
                     <option key={m} value={m}>
                       {m}
                     </option>
@@ -420,7 +421,7 @@ export function ReturnDrawer({ returnNo }: { returnNo: string }) {
                 type="button"
                 onClick={() =>
                   void run(
-                    () => returns.refund(request.id, Number(amount), method),
+                    () => returns.refund(request.id, Number(amount), refundMethod),
                     'Refund recorded',
                   )
                 }

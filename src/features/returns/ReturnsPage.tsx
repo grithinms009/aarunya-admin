@@ -13,6 +13,7 @@ import { LogRequestModal } from './LogRequestModal';
 import { ReturnDrawer } from './ReturnDrawer';
 import s from './ReturnsPage.module.css';
 import type { ReturnType } from '@/data/types';
+import { useReference } from '@/hooks/useReference';
 
 const TABS: [ReturnTab, string][] = [
   ['review', 'Needs review'],
@@ -21,9 +22,9 @@ const TABS: [ReturnTab, string][] = [
   ['all', 'All'],
 ];
 
-const WINDOWS = [2, 3, 5, 7, 10, 15, 30];
 
 export function ReturnsPage() {
+  const { returnWindows } = useReference();
   const { returnNo } = useParams();
   const navigate = useNavigate();
   const { w } = useViewport();
@@ -172,7 +173,7 @@ export function ReturnsPage() {
               onChange={(e) => void savePolicy({ returnWindow: Number(e.target.value) })}
               className={f.select}
             >
-              {WINDOWS.map((n) => (
+              {returnWindows.map((n) => (
                 <option key={n} value={String(n)}>
                   {n} days after delivery
                 </option>

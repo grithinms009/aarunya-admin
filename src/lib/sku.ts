@@ -1,31 +1,17 @@
-/** Auto SKU: AJ-{CATEGORY}{PRODUCT NUMBER}-{COLOUR}, the same rule as skuFor in
- *  design_handoff_aarunya_admin/aarunya-admin-db.js. */
-
-const COLOR_CODE: Record<string, string> = {
-  gold: 'GLD',
-  rose: 'RSG',
-  silver: 'SLV',
-  black: 'BLK',
-  green: 'GRN',
-};
-
-const CAT_CODE: Record<string, string> = {
-  necklaces: 'NK',
-  bangles: 'BG',
-  bracelets: 'BR',
-  rings: 'RG',
-  handchains: 'HC',
-  hipchains: 'HP',
-  earrings: 'ER',
-  'nose-rings': 'NR',
-};
+/** Auto SKU: AJ-{CATEGORY}{PRODUCT NUMBER}-{COLOUR}.
+ *
+ *  The code maps come from the API (meta.reference().skuCodes), which is also what the
+ *  server uses when it generates the real SKU — this only renders the placeholder that
+ *  shows what the SKU will be. */
+import type { Reference } from '@/api';
 
 export const skuFor = (
   p: { id: string; category: string },
   color: string,
+  codes: Reference['skuCodes'],
 ): string => {
-  const cat = CAT_CODE[p.category] || String(p.category || 'XX').slice(0, 2).toUpperCase();
+  const cat = codes.categories[p.category] || String(p.category || 'XX').slice(0, 2).toUpperCase();
   const n = String(p.id).replace(/\D/g, '').padStart(3, '0');
-  const col = COLOR_CODE[color] || String(color).slice(0, 3).toUpperCase();
+  const col = codes.colors[color] || String(color).slice(0, 3).toUpperCase();
   return `AJ-${cat}${n}-${col}`;
 };

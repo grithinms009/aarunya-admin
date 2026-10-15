@@ -11,7 +11,6 @@
    writeDescription(): becomes a server call to Claude with this prompt. The offline
    fallback is a plain sentence, never invented copy dressed up as a model's output. */
 import { composeLook, resizeFile, type LookKind } from '@/lib/image';
-import { reply } from './mock/store';
 
 export interface GeneratedLook {
   kind: LookKind;
@@ -56,9 +55,6 @@ export const media = {
 
   async writeDescription(input: DescriptionInput): Promise<string> {
     const stem = input.category.replace(/^Anti-Tarnish\s+/i, '').toLowerCase().replace(/s$/, '');
-    return reply(
-      `A ${stem} with an anti-tarnish finish, light enough for everyday wear and pretty for family functions.`,
-      400,
-    );
+    return `A ${stem} with an anti-tarnish finish, light enough for everyday wear and pretty for family functions.`;
   },
 };

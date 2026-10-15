@@ -8,6 +8,7 @@ import { PATH } from '@/components/ui/icons';
 import { useViewport } from '@/hooks/useViewport';
 import { inr, num, plural, slugify } from '@/lib/format';
 import { skuFor } from '@/lib/sku';
+import { useReference } from '@/hooks/useReference';
 import { useUi } from '@/store/useUi';
 import f from '@/styles/form.module.css';
 import { AiPhotoStudio } from './AiPhotoStudio';
@@ -15,7 +16,6 @@ import { blankDraft, draftFrom, useDraft, type Draft } from './useDraft';
 import s from './ProductEditor.module.css';
 import type { Product } from '@/data/types';
 
-const SLOTS = ['Front', 'On model', 'Detail'];
 
 export function ProductEditor() {
   const { id = 'new' } = useParams();
@@ -29,6 +29,7 @@ export function ProductEditor() {
   const { data: categories = [] } = useQuery({ queryKey: ['categories'], queryFn: meta.categories });
   const { data: colors = {} } = useQuery({ queryKey: ['colors'], queryFn: meta.colors });
   const { data: config } = useQuery({ queryKey: ['config'], queryFn: meta.config });
+  const { skuCodes, photoSlots } = useReference();
   const { data: loaded, isLoading } = useQuery({
     queryKey: ['product', id],
     queryFn: () => products.get(id),
@@ -435,7 +436,7 @@ export function ProductEditor() {
                       <input
                         value={v.sku}
                         onChange={(e) => setVariant(i, { sku: e.target.value.toUpperCase() })}
-                        placeholder={skuFor(draft, v.color)}
+                        placeholder={skuFor(draft, v.color, skuCodes)}
                         className={s.skuInput}
                       />
                     </label>
@@ -493,7 +494,7 @@ export function ProductEditor() {
                       </span>
                     </div>
                     <div className={s.photosGrid}>
-                      {SLOTS.map((label, si) => (
+                      {photoSlots.map((label, si) => (
                         <div key={label} className={s.slot}>
                           <div className={s.frame}>
                             {v.images[si] ? (

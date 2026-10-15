@@ -1,6 +1,5 @@
-/* Entity shapes, ported from design_handoff_aarunya_admin/aarunya-admin-db.js and
-   aarunya-api.js. These are the shapes the backend will serve, so the UI is written
-   against them and only src/api/* changes when the API lands. */
+/* Entity shapes. These are exactly what the API serves, so the screens and the backend
+   agree on one vocabulary; src/api/* is the only place they are read from the wire. */
 
 export type ColorKey = string;
 
@@ -259,20 +258,4 @@ export interface Config {
 export interface AdminUser {
   email: string;
   name: string;
-}
-
-/** The whole admin dataset. Mirrors what the backend will expose per resource. */
-export interface AdminDb {
-  v: number;
-  products: Product[];
-  categories: Category[];
-  colors: Record<ColorKey, ColorDef>;
-  banners: Banners;
-  offers: Offer[];
-  announcements: string[];
-  config: Config;
-  orders: Order[];
-  returns: ReturnRequest[];
-  ledger: LedgerEntry[];
-  admin: AdminUser & { pass: string };
 }

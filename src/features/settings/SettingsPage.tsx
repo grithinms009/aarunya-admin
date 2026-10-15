@@ -8,8 +8,8 @@ import { useUi } from '@/store/useUi';
 import f from '@/styles/form.module.css';
 import s from './SettingsPage.module.css';
 import type { Courier } from '@/data/types';
+import { useReference } from '@/hooks/useReference';
 
-const CUTOFFS = [12, 13, 14, 15, 16, 17, 18];
 
 interface Draft {
   config: Record<string, string | boolean>;
@@ -23,6 +23,7 @@ interface Draft {
 }
 
 export function SettingsPage() {
+  const { dispatchCutoffs } = useReference();
   const qc = useQueryClient();
   const flash = useUi((st) => st.flash);
   const setUser = useAuth((st) => st.setUser);
@@ -195,7 +196,7 @@ export function SettingsPage() {
                 onChange={(e) => setConfig('DISPATCH_CUTOFF_HOUR', e.target.value)}
                 className={f.select}
               >
-                {CUTOFFS.map((h) => (
+                {dispatchCutoffs.map((h) => (
                   <option key={h} value={String(h)}>
                     {h > 12 ? h - 12 : h}:00 {h >= 12 ? 'pm' : 'am'}
                   </option>

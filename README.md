@@ -6,9 +6,18 @@ the repo as the design and behaviour reference: its inline styles are the source
 every colour, size and spacing, and the `Component` class at the bottom of
 `Aarunya Admin.dc.html` is the source of truth for the business rules.
 
-Companion repos: `aarunya-web` (storefront) and `aarunya-api` (Spring Boot backend, to come).
+Companion repos: `aarunya-web` (storefront) and `aarunya-backend` (the Node.js/Express + PostgreSQL
+API this app runs against).
 
 ## Running it
+
+Start the API first — see `../aarunya-backend/README.md`; it needs Docker for PostgreSQL:
+
+```bash
+cd ../aarunya-backend && docker compose up -d && npm install && npm run db:reset && npm run dev
+```
+
+Then, in this repo:
 
 ```bash
 npm install
@@ -16,16 +25,20 @@ npm run dev          # http://localhost:5174
 npm run build        # typecheck + production bundle into dist/
 npm run preview      # serve the built bundle
 npm run typecheck
-npm run check:rules  # business-rule checks against the data layer
 ```
 
 Sign in with the seeded account: **veena@aarunyajewels.in** / **aarunya123**.
+
+`npm run dev` proxies `/api` to `http://localhost:4000`, so the admin and the API share an
+origin in development and the session cookie is first-party. Set `VITE_API_PROXY` to point the
+proxy somewhere else, or `VITE_API_BASE` to call an absolute URL instead.
 
 ### Environment
 
 | Variable | Default | Used for |
 |---|---|---|
-| `VITE_API_BASE` | `http://localhost:8080/api` | Backend, once `src/api/*` talks HTTP |
+| `VITE_API_BASE` | `/api` | API base path; absolute URL to skip the dev proxy |
+| `VITE_API_PROXY` | `http://localhost:4000` | Where `npm run dev` proxies `/api` |
 | `VITE_STORE_URL` | `http://localhost:5173` | "View store" links and product previews |
 
 ## Stack
@@ -46,7 +59,7 @@ computed from `useViewport()`.
 ```
 src/
   api/          the only place the UI reads or writes data, one module per resource
-    mock/       DEV-ONLY browser-side store that stands in for the backend
+    client.ts   fetch wrapper: session cookie, CSRF header, error mapping
   data/         entity types and the seed catalogue, orders, returns and stock ledger
   lib/          format, sku, csv, badges, image, invoice
   hooks/        useViewport
@@ -56,7 +69,6 @@ src/
     ui/         Card, Drawer, Modal, ConfirmDialog, Toast, controls, icons
   features/     auth, dashboard, orders, pos, returns, products, categories,
                 inventory, storefront, customers, settings
-scripts/        check-rules.mjs — runs the business-rule checks in Node
 ```
 
 ## Screens
@@ -68,30 +80,47 @@ Settings.
 
 ## Data layer
 
-`src/api/` is the only module the UI talks to. It currently runs against
-`src/api/mock/store.ts`, a browser-side dataset seeded from the prototype's demo data and
-persisted to `localStorage` under `aj_admin_mock_db` — clearly marked dev-only. Every screen is
-written against the shapes the backend will serve, so connecting the API means swapping each
-module's body for a `fetch` call and deleting `src/api/mock/`. No screen changes.
+`src/api/` is the only module the UI talks to, one file per resource, all of them going through
+`src/api/client.ts`. That wrapper sends the session cookie, echoes the CSRF token back as a
+header on every mutating request, and turns the API's `{ error, message, fields }` responses
+into the error classes each screen already catches (`ValidationError`, `ConflictError`,
+`RuleError`, `ReturnRuleError`, `SettingsValidationError`).
 
-The rules that belong on the server are implemented in one place each, so they are easy to port:
+The browser-side mock this app was built against is gone — `src/api/mock/` was deleted when the
+API landed, and no screen changed. Nothing is cached in `localStorage` any more; the session is
+an HTTP-only cookie the browser manages.
+
+**No store data is hard-coded here.** The demo catalogue that used to sit in `src/data/seed/`
+now lives with the database in `aarunya-backend/seed-src/`, and the fixed vocabularies —
+adjustment reasons, return reasons, refund methods, payment modes, the order and return flow
+labels, offer link targets, default artwork, photo slots, return windows, dispatch cut-offs,
+category tints and the SKU code maps — come from `GET /api/admin/meta/reference` through
+`useReference()`, which caches them for the session. The backend defines them in one module
+that its own rules read, so a dropdown and the rule behind it cannot drift apart.
+
+What deliberately stays in the frontend is presentation, not data: the badge colours in
+`lib/badges.ts`, and the filter/sort labels on each screen, which name query-string values the
+API's own schemas already type-check.
+
+The rules the prototype implemented client-side are now enforced by the API, which is the
+authority on all of them:
 
 | Rule | Where |
 |---|---|
-| Sequential order numbers, `AJ1001…` online and `OS…` offline | `api/orders.ts` |
-| No advance while payment is pending; no "shipped" without courier + AWB | `api/orders.ts` |
-| Cancel restores stock and marks a paid order refunded | `api/orders.ts` |
-| Offline sale re-checks live stock per line before writing | `api/orders.ts` |
-| Stock never below 0, exactly one ledger row per movement | `api/mock/store.ts` → `moveStock()` |
-| Adjustment modes (add / remove / set) and reason labels | `api/inventory.ts` |
-| Return eligibility: window, category, unboxing video | `api/returns.ts` |
-| Restock, replacement and refund stock and payment effects | `api/returns.ts` |
-| Product validation, auto SKU, duplicate-as-draft | `api/products.ts`, `lib/sku.ts` |
-| Category delete guard and pairing cleanup | `api/categories.ts` |
-| Settings validation, colour-in-use guard | `api/settings.ts` |
+| Sequential order numbers, `AJ1001…` online and `OS…` offline | `aarunya-backend` `routes/orders.js` |
+| No advance while payment is pending; no "shipped" without courier + AWB | `routes/orders.js` |
+| Cancel restores stock and marks a paid order refunded | `routes/orders.js` |
+| Offline sale re-checks live stock per line before writing | `routes/orders.js` |
+| Stock never below 0, exactly one ledger row per movement | `lib/stock.js` → `applyStock()` |
+| Adjustment modes (add / remove / set) and reason labels | `routes/inventory.js` |
+| Return eligibility: window, category, unboxing video | `routes/returns.js` |
+| Restock, replacement and refund stock and payment effects | `routes/returns.js` |
+| Product validation, auto SKU, duplicate-as-draft | `routes/products.js`, `lib/format.js` |
+| Category delete guard and pairing cleanup | `routes/categories.js` |
+| Settings validation, colour-in-use guard | `routes/settings.js` |
 
-`npm run check:rules` exercises all of the above headlessly. Those checks move to the backend's
-test suite once it exists.
+`npm test` in `aarunya-backend` exercises all of the above against the real API and database.
+It is the former `npm run check:rules`, moved where the rules now live.
 
 ## Still to wire up
 

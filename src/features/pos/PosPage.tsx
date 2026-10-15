@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { RuleError, meta, orders, products } from '@/api';
 import { PageHeader } from '@/components/layout/PageHeader';
+import { useReference } from '@/hooks/useReference';
 import { useViewport } from '@/hooks/useViewport';
 import { fDT, inr, num, plural, waLink, ymd } from '@/lib/format';
 import { useUi } from '@/store/useUi';
@@ -11,7 +12,6 @@ import f from '@/styles/form.module.css';
 import s from './PosPage.module.css';
 import type { Order, Product, Variant } from '@/data/types';
 
-const PAY_MODES = ['Cash', 'UPI', 'Card'];
 
 interface BillLine {
   pid: string;
@@ -29,6 +29,7 @@ interface BillLine {
 }
 
 export function PosPage() {
+  const { payModes } = useReference();
   const { w } = useViewport();
   const navigate = useNavigate();
   const qc = useQueryClient();
@@ -447,7 +448,7 @@ export function PosPage() {
               <div className={s.payGroup}>
                 <span className={s.payLabel}>Paid by</span>
                 <div className={s.modes}>
-                  {PAY_MODES.map((m) => (
+                  {payModes.map((m) => (
                     <button
                       key={m}
                       type="button"

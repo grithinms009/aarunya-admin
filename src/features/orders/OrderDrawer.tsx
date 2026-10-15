@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { NEXT_STEP, ORDER_STEPS, RuleError, meta, orders } from '@/api';
+import { RuleError, meta, orders } from '@/api';
+import { useReference } from '@/hooks/useReference';
 import { Drawer, Steps, buildSteps } from '@/components/ui/Drawer';
 import { CHANNEL, ORDER_STATUS, PAYMENT_STATUS } from '@/lib/badges';
 import { fDT, inr, plural, waLink } from '@/lib/format';
@@ -19,6 +20,7 @@ export function OrderDrawer({ orderNo }: Props) {
   const qc = useQueryClient();
   const flash = useUi((st) => st.flash);
   const ask = useUi((st) => st.ask);
+  const { nextStep, orderSteps } = useReference();
 
   const { data: order } = useQuery({
     queryKey: ['order', orderNo],
@@ -53,7 +55,7 @@ export function OrderDrawer({ orderNo }: Props) {
   };
 
   const online = order.channel === 'online';
-  const next = NEXT_STEP[order.status];
+  const next = nextStep[order.status];
   const colorLabel = (k: string) => colors[k]?.label ?? k;
   const firstName = (order.customer.name || '').split(' ')[0];
 
@@ -180,7 +182,7 @@ export function OrderDrawer({ orderNo }: Props) {
 
       {online && order.status !== 'cancelled' && (
         <Steps
-          steps={buildSteps(ORDER_STEPS, order.status, order.history).map((st) => ({
+          steps={buildSteps(orderSteps, order.status, order.history).map((st) => ({
             ...st,
             at: st.at ? fDT(st.at) : '',
           }))}

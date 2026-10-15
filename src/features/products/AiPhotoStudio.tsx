@@ -5,8 +5,8 @@ import type { LookKind } from '@/lib/image';
 import { useUi } from '@/store/useUi';
 import s from './AiPhotoStudio.module.css';
 import type { Draft } from './useDraft';
+import { useReference } from '@/hooks/useReference';
 
-const SLOTS = ['Front', 'On model', 'Detail'];
 
 /** The five looks, from the prototype's AIK list. */
 const LOOKS: [LookKind, string, string][] = [
@@ -30,6 +30,7 @@ interface Props {
 }
 
 export function AiPhotoStudio({ draft, vi, si, colorLabel, onUse, onClose }: Props) {
+  const { photoSlots } = useReference();
   const flash = useUi((st) => st.flash);
   const variant = draft.variants[vi];
 
@@ -80,8 +81,8 @@ export function AiPhotoStudio({ draft, vi, si, colorLabel, onUse, onClose }: Pro
     const r = results[ri];
     if (!r?.src) return;
     onUse(slot, r.src);
-    setUsedAs((u) => ({ ...u, [ri]: SLOTS[slot] }));
-    flash(`Added as ${SLOTS[slot].toLowerCase()} photo`);
+    setUsedAs((u) => ({ ...u, [ri]: photoSlots[slot] }));
+    flash(`Added as ${photoSlots[slot].toLowerCase()} photo`);
   };
 
   const isSetup = !busy && results.length === 0;
@@ -260,7 +261,7 @@ export function AiPhotoStudio({ draft, vi, si, colorLabel, onUse, onClose }: Pro
             <div className={s.results}>
               <p className={s.lede}>
                 Pick where each photo goes. The highlighted button fills the{' '}
-                {SLOTS[si].toLowerCase()} slot you opened this from.
+                {photoSlots[si].toLowerCase()} slot you opened this from.
               </p>
               <div className={s.resultsGrid}>
                 {results.map((r, ri) => (
@@ -286,7 +287,7 @@ export function AiPhotoStudio({ draft, vi, si, colorLabel, onUse, onClose }: Pro
                     </span>
                     {!r.pending && (
                       <div className={s.useRow}>
-                        {SLOTS.map((label, slot) => (
+                        {photoSlots.map((label, slot) => (
                           <button
                             key={label}
                             type="button"

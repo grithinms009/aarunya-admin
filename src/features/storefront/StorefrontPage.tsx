@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
-  DEFAULT_IMAGES,
-  OFFER_LINKS,
   media,
   storefront,
   type StorefrontContent,
 } from '@/api';
+import { useReference } from '@/hooks/useReference';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Switch } from '@/components/ui/controls';
 import { useViewport } from '@/hooks/useViewport';
@@ -19,6 +18,7 @@ import type { Banners, Offer } from '@/data/types';
 const STORE_URL = import.meta.env.VITE_STORE_URL ?? 'http://localhost:5173';
 
 export function StorefrontPage() {
+  const { defaultImages, offerLinks } = useReference();
   const { w, desk } = useViewport();
   const qc = useQueryClient();
   const flash = useUi((st) => st.flash);
@@ -135,7 +135,7 @@ export function StorefrontPage() {
                 </label>
                 <button
                   type="button"
-                  onClick={() => setBanners({ heroDesktop: DEFAULT_IMAGES.heroDesktop })}
+                  onClick={() => setBanners({ heroDesktop: defaultImages.heroDesktop })}
                   className={s.textBtn}
                 >
                   Restore original
@@ -230,7 +230,7 @@ export function StorefrontPage() {
                 </label>
                 <button
                   type="button"
-                  onClick={() => setBanners({ personalised: DEFAULT_IMAGES.personalised })}
+                  onClick={() => setBanners({ personalised: defaultImages.personalised })}
                   className={s.textBtn}
                 >
                   Restore original
@@ -260,7 +260,7 @@ export function StorefrontPage() {
                 <button
                   type="button"
                   onClick={() =>
-                    setBanners({ personalisedMobile: DEFAULT_IMAGES.personalisedMobile })
+                    setBanners({ personalisedMobile: defaultImages.personalisedMobile })
                   }
                   className={s.textBtn}
                 >
@@ -341,7 +341,7 @@ export function StorefrontPage() {
                   <button
                     type="button"
                     onClick={() =>
-                      setOffer(i, { image: DEFAULT_IMAGES.offers[i] ?? o.image })
+                      setOffer(i, { image: defaultImages.offers[i] ?? o.image })
                     }
                     className={s.textBtn}
                   >
@@ -355,7 +355,7 @@ export function StorefrontPage() {
                     <select
                       value={o.match}
                       onChange={(e) => {
-                        const link = OFFER_LINKS.find((l) => l[0] === e.target.value);
+                        const link = offerLinks.find((l) => l[0] === e.target.value);
                         setOffer(i, {
                           match: e.target.value as Offer['match'],
                           href: link ? link[1] : o.href,
@@ -363,7 +363,7 @@ export function StorefrontPage() {
                       }}
                       className={f.select}
                     >
-                      {OFFER_LINKS.map(([v, , label]) => (
+                      {offerLinks.map(([v, , label]) => (
                         <option key={v} value={v}>
                           {label}
                         </option>

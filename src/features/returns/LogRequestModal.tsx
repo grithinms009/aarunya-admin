@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { RETURN_REASONS, ReturnRuleError, meta, orders, returns } from '@/api';
+import { ReturnRuleError, meta, orders, returns } from '@/api';
+import { useReference } from '@/hooks/useReference';
 import { Modal } from '@/components/ui/Modal';
 import { Switch } from '@/components/ui/controls';
 import { fD } from '@/lib/format';
@@ -23,11 +24,12 @@ export function LogRequestModal({ onClose, onSaved }: Props) {
     queryFn: () => orders.returnable(60),
   });
   const { data: colors = {} } = useQuery({ queryKey: ['colors'], queryFn: meta.colors });
+  const { returnReasons } = useReference();
 
   const [orderId, setOrderId] = useState('');
   const [vid, setVid] = useState('');
   const [type, setType] = useState<ReturnType>('replacement');
-  const [reason, setReason] = useState(RETURN_REASONS[0]);
+  const [reason, setReason] = useState('');
   const [note, setNote] = useState('');
   const [video, setVideo] = useState(false);
   const [err, setErr] = useState('');
@@ -47,7 +49,9 @@ export function LogRequestModal({ onClose, onSaved }: Props) {
     setBusy(true);
     setErr('');
     try {
-      const req = await returns.log({ orderId, vid, type, reason, note, video });
+      const req = await returns.log({
+        orderId, vid, type, reason: reason || returnReasons[0] || '', note, video,
+      });
       flash(`Request ${req.id} logged`);
       onSaved(req.id);
     } catch (e) {
@@ -129,8 +133,12 @@ export function LogRequestModal({ onClose, onSaved }: Props) {
 
       <label className={f.label}>
         Reason
-        <select value={reason} onChange={(e) => setReason(e.target.value)} className={f.select}>
-          {RETURN_REASONS.map((r) => (
+        <select
+          value={reason || returnReasons[0] || ''}
+          onChange={(e) => setReason(e.target.value)}
+          className={f.select}
+        >
+          {returnReasons.map((r) => (
             <option key={r} value={r}>
               {r}
             </option>
