@@ -12,6 +12,7 @@ import f from '@/styles/form.module.css';
 import { useProductFilters, type ProductFilters } from './useProductFilters';
 import s from './ProductsPage.module.css';
 import type { Product } from '@/data/types';
+import { EmptyState } from '@/components/ui/EmptyState';
 
 const SORTS: [string, string][] = [
   ['new', 'Newest first'],
@@ -394,7 +395,23 @@ export function ProductsPage() {
             </div>
           </div>
 
-          {rows.length === 0 && <p className={s.empty}>No products match these filters.</p>}
+          {rows.length === 0 && (
+            (data?.total ?? 0) === 0 ? (
+              <EmptyState
+                title="No products yet"
+                body="Add your first piece and it appears in the shop straight away. You will need a category first."
+                action="/products/new"
+                actionLabel="Add product"
+              />
+            ) : (
+              <EmptyState
+                title="No products match these filters"
+                body="Try a different category, colour or stock level."
+                onAction={filters.reset}
+                actionLabel="Clear filters"
+              />
+            )
+          )}
         </div>
       </div>
     </>

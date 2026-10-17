@@ -25,7 +25,14 @@ npm run dev          # http://localhost:5174
 npm run build        # typecheck + production bundle into dist/
 npm run preview      # serve the built bundle
 npm run typecheck
+npm run test:flows   # scenario tests, driven through a real browser
 ```
+
+`test:flows` resets the store, then walks the panel as a user would: signing in with a
+wrong password first, every screen on an empty shop, the setup path (colours → category →
+product), an offline sale, the order drawer's payment and shipping guards, and the returns
+queue. It launches headless Chrome itself and fails on any console error, any failing API
+call, or any screen that renders nothing. The API and both dev servers must be running.
 
 Sign in with the seeded account: **veena@aarunyajewels.in** / **aarunya123**.
 
@@ -75,6 +82,14 @@ src/
   features/     auth, dashboard, orders, pos, returns, products, categories,
                 inventory, storefront, customers, settings
 ```
+
+## Empty states
+
+A screen with no rows has two different causes, and the panel distinguishes them: either
+the shop has none of these yet — in which case it names the next step and links to it —
+or a filter excluded them, in which case it offers to clear the filter. Both come from
+`components/ui/EmptyState.tsx`. Screens that cannot work at all without something else,
+such as the product editor without a category, say so instead of rendering blank.
 
 ## Screens
 

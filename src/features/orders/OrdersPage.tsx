@@ -10,6 +10,7 @@ import f from '@/styles/form.module.css';
 import { OrderDrawer } from './OrderDrawer';
 import { BLANK_ORDER_FILTERS, useOrderFilters, type OrderFilters } from './useOrderFilters';
 import s from './OrdersPage.module.css';
+import { EmptyState } from '@/components/ui/EmptyState';
 
 const STATUSES: [string, string][] = [
   ['', 'Any status'],
@@ -309,7 +310,23 @@ export function OrdersPage() {
             </div>
           </div>
 
-          {rows.length === 0 && <p className={s.empty}>No orders match these filters.</p>}
+          {rows.length === 0 && (
+            counts.all === 0 && !hasFilters ? (
+              <EmptyState
+                title="No orders yet"
+                body="Online orders land here as soon as they are placed. You can also record a sale you made in person."
+                action="/pos"
+                actionLabel="Record an offline sale"
+              />
+            ) : (
+              <EmptyState
+                title="No orders match these filters"
+                body="Try a wider date range, or a different status or payment state."
+                onAction={() => filters.set({ ...BLANK_ORDER_FILTERS })}
+                actionLabel="Reset filters"
+              />
+            )
+          )}
         </div>
       </div>
 

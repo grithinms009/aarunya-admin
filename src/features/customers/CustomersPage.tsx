@@ -11,6 +11,7 @@ import { BLANK_ORDER_FILTERS, useOrderFilters } from '@/features/orders/useOrder
 import f from '@/styles/form.module.css';
 import s from './CustomersPage.module.css';
 import type { Channel } from '@/data/types';
+import { EmptyState } from '@/components/ui/EmptyState';
 
 export function CustomersPage() {
   const navigate = useNavigate();
@@ -147,7 +148,23 @@ export function CustomersPage() {
             </div>
           </div>
 
-          {rows.length === 0 && <p className={s.empty}>No customers match.</p>}
+          {rows.length === 0 && (
+            q || channel ? (
+              <EmptyState
+                title="No customers match"
+                body="Try a different name, phone number or channel."
+                onAction={() => { setQ(''); setChannel(''); }}
+                actionLabel="Clear search"
+              />
+            ) : (
+              <EmptyState
+                title="No customers yet"
+                body="This list builds itself from your orders — everyone who buys online or in person appears here."
+                action="/pos"
+                actionLabel="Record an offline sale"
+              />
+            )
+          )}
         </div>
       </div>
     </>

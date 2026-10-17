@@ -1,0 +1,48 @@
+/* Matches the surrounding cards: same surface, border and radius as the tables it
+   replaces, so an empty screen still looks like part of the panel. */
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: clamp(32px, 6vw, 56px) 24px;
+  background: #fff;
+  border: 1px solid var(--line, #E1E4E8);
+  border-radius: 10px;
+  text-align: center;
+}
+
+.title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink, #1E2125);
+}
+
+.body {
+  margin: 0;
+  max-width: 44ch;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--ink-3, #6B7178);
+}
+
+.action {
+  margin-top: 6px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 0 18px;
+  border: 1px solid var(--gold, #A8822F);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--gold, #A8822F);
+  font: inherit;
+  font-size: 13.5px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.action:hover {
+  background: var(--gold-tint, #FAF4E6);
+}

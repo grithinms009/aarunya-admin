@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { ConflictError, categories } from '@/api';
 import { PageHeader } from '@/components/layout/PageHeader';
+import { EmptyState } from '@/components/ui/EmptyState';
 import { Icon, PATH } from '@/components/ui/icons';
 import { useViewport } from '@/hooks/useViewport';
 import { plural } from '@/lib/format';
@@ -151,10 +152,21 @@ export function CategoriesPage() {
           );
         })}
 
-        <p className={s.hint}>
-          Use the arrows to change the order categories appear in the shop menu.
-        </p>
+        {rows.length > 1 && (
+          <p className={s.hint}>
+            Use the arrows to change the order categories appear in the shop menu.
+          </p>
+        )}
       </div>
+
+      {rows.length === 0 && (
+        <EmptyState
+          title="No categories yet"
+          body="Categories group your pieces in the shop menu and filters. Add one before you add products."
+          onAction={() => setEditing(null)}
+          actionLabel="Add category"
+        />
+      )}
 
       {editing !== undefined && (
         <CategoryModal

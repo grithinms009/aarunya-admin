@@ -14,6 +14,7 @@ import { ReturnDrawer } from './ReturnDrawer';
 import s from './ReturnsPage.module.css';
 import type { ReturnType } from '@/data/types';
 import { useReference } from '@/hooks/useReference';
+import { EmptyState } from '@/components/ui/EmptyState';
 
 const TABS: [ReturnTab, string][] = [
   ['review', 'Needs review'],
@@ -154,7 +155,19 @@ export function ReturnsPage() {
                 </button>
               );
             })}
-            {rows.length === 0 && <p className={s.empty}>Nothing here right now.</p>}
+            {rows.length === 0 && (
+              (counts?.all ?? 0) === 0 ? (
+                <EmptyState
+                  title="No return requests"
+                  body="Requests appear here when a customer raises one from the website, or when you log one yourself."
+                />
+              ) : (
+                <EmptyState
+                  title="Nothing in this tab"
+                  body="Try another tab, or clear the search."
+                />
+              )
+            )}
           </div>
         </div>
 

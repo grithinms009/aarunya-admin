@@ -62,6 +62,27 @@ export function LogRequestModal({ onClose, onSaved }: Props) {
     }
   };
 
+  /* A request is always against an order, so with none there is nothing to fill in.
+     Offer the way out rather than a form that cannot be submitted. */
+  if (!list.length) {
+    return (
+      <Modal
+        title="Log a request"
+        onClose={onClose}
+        footer={
+          <button type="button" onClick={onClose} className={m.cancel}>
+            Close
+          </button>
+        }
+      >
+        <p className={s.note}>
+          There are no orders to raise a request against yet. Once a customer has an order
+          — placed on the website or recorded as an offline sale — it can be logged here.
+        </p>
+      </Modal>
+    );
+  }
+
   return (
     <Modal
       title="Log a request"

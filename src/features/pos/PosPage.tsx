@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { RuleError, meta, orders, products } from '@/api';
 import { PageHeader } from '@/components/layout/PageHeader';
+import { EmptyState } from '@/components/ui/EmptyState';
 import { useReference } from '@/hooks/useReference';
 import { useViewport } from '@/hooks/useViewport';
 import { fDT, inr, num, plural, waLink, ymd } from '@/lib/format';
@@ -260,7 +261,21 @@ export function PosPage() {
                 </div>
               );
             })}
-            {results.length === 0 && <p className={s.empty}>No pieces match that search.</p>}
+            {results.length === 0 && (
+              (list?.total ?? 0) === 0 ? (
+                <EmptyState
+                  title="Nothing to sell yet"
+                  body="Add a product with at least one colour and it becomes available here for in-person sales."
+                  action="/products/new"
+                  actionLabel="Add product"
+                />
+              ) : (
+                <EmptyState
+                  title="No pieces match that search"
+                  body="Try another name or SKU, or choose a different category."
+                />
+              )
+            )}
           </div>
         </section>
 

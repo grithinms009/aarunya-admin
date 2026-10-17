@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ValidationError, media, meta, products } from '@/api';
 import { PageHeader } from '@/components/layout/PageHeader';
+import { EmptyState } from '@/components/ui/EmptyState';
 import { Switch } from '@/components/ui/controls';
 import { PATH } from '@/components/ui/icons';
 import { useViewport } from '@/hooks/useViewport';
@@ -67,6 +68,27 @@ export function ProductEditor() {
         <div className={s.missing}>
           This product doesn’t exist any more. <Link to="/products">Back to products</Link>
         </div>
+      </>
+    );
+  }
+
+  /* A product must belong to a category, so without one there is nothing to fill in.
+     Say that and link to the fix, rather than rendering an empty page. */
+  if (isNew && config && categories.length === 0) {
+    return (
+      <>
+        <PageHeader
+          title="Add product"
+          sub="One step first."
+          backTo="/products"
+          backLabel="Products"
+        />
+        <EmptyState
+          title="Create a category first"
+          body="Every product belongs to a category — it is how pieces are grouped in the shop menu and filters. Add one, then come back and add your product."
+          action="/categories"
+          actionLabel="Go to categories"
+        />
       </>
     );
   }

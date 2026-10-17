@@ -12,6 +12,7 @@ import { AdjustStockModal } from './AdjustStockModal';
 import { useInventoryFilters } from './useInventoryFilters';
 import s from './InventoryPage.module.css';
 import type { LedgerReason } from '@/data/types';
+import { EmptyState } from '@/components/ui/EmptyState';
 
 const STOCK_LEVELS: [string, string][] = [
   ['', 'Any stock'],
@@ -260,7 +261,21 @@ export function InventoryPage() {
                 })}
               </div>
             </div>
-            {rows.length === 0 && <p className={s.empty}>No variants match.</p>}
+            {rows.length === 0 && (
+              (summary?.variants ?? 0) === 0 ? (
+                <EmptyState
+                  title="No stock to show yet"
+                  body="Stock appears here once you add a product with at least one colour."
+                  action="/products/new"
+                  actionLabel="Add product"
+                />
+              ) : (
+                <EmptyState
+                  title="No variants match"
+                  body="Try a different category or stock level."
+                />
+              )
+            )}
           </div>
         ) : (
           <div className={s.card}>
@@ -317,7 +332,12 @@ export function InventoryPage() {
                 })}
               </div>
             </div>
-            {ledger.length === 0 && <p className={s.empty}>No stock changes match.</p>}
+            {ledger.length === 0 && (
+              <EmptyState
+                title="No stock changes yet"
+                body="Every sale, return and adjustment is recorded here, newest first."
+              />
+            )}
           </div>
         )}
       </div>
