@@ -49,7 +49,7 @@ export function CategoryModal({ category, all, counts, onClose, onSaved }: Props
     e.target.value = '';
     if (!file) return;
     try {
-      setImage(await media.upload(file, 800));
+      setImage(await media.upload(file, 800, 'category'));
     } catch (e2) {
       flash(e2 instanceof Error ? e2.message : 'Could not read that image');
     }

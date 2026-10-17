@@ -59,7 +59,7 @@ export function StorefrontPage() {
       e.target.value = '';
       if (!file) return;
       try {
-        apply(await media.upload(file, max));
+        apply(await media.upload(file, max, 'banner'));
       } catch (err) {
         flash(err instanceof Error ? err.message : 'Could not read that image');
       }

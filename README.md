@@ -29,6 +29,11 @@ npm run typecheck
 
 Sign in with the seeded account: **veena@aarunyajewels.in** / **aarunya123**.
 
+The store starts empty — no products, categories or colours. Add them here, in this order:
+**Settings → colours**, then **Categories**, then **Products**. A product needs a category
+and at least one colour to exist first. Photos upload to the API and are stored as files;
+only the URL is kept in the database.
+
 `npm run dev` proxies `/api` to `http://localhost:4000`, so the admin and the API share an
 origin in development and the session cookie is first-party. Set `VITE_API_PROXY` to point the
 proxy somewhere else, or `VITE_API_BASE` to call an absolute URL instead.
@@ -38,7 +43,7 @@ proxy somewhere else, or `VITE_API_BASE` to call an absolute URL instead.
 | Variable | Default | Used for |
 |---|---|---|
 | `VITE_API_BASE` | `/api` | API base path; absolute URL to skip the dev proxy |
-| `VITE_API_PROXY` | `http://localhost:4000` | Where `npm run dev` proxies `/api` |
+| `VITE_API_PROXY` | `http://localhost:4000` | Where `npm run dev` proxies `/api` and `/uploads` |
 | `VITE_STORE_URL` | `http://localhost:5173` | "View store" links and product previews |
 
 ## Stack

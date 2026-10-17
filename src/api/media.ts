@@ -1,8 +1,7 @@
 /* Uploads and the AI helpers.
 
-   upload(): becomes POST /api/admin/uploads/sign followed by a direct PUT to object
-   storage; the API returns the 1600px URL and a 400px thumb. Until then the file is
-   downscaled in the browser and kept as a data URL so the admin works with no backend.
+   upload(): the file is downscaled in the browser, then posted to POST /api/admin/uploads,
+   which writes it to storage and returns the URL. Only that URL is kept in the database.
 
    generateLooks(): becomes a server call to the image service. The prototype's canvas
    composition stands in for it, and the on-model look stays pending, exactly as the
@@ -11,6 +10,7 @@
    writeDescription(): becomes a server call to Claude with this prompt. The offline
    fallback is a plain sentence, never invented copy dressed up as a model's output. */
 import { composeLook, resizeFile, type LookKind } from '@/lib/image';
+import { req } from './client';
 
 export interface GeneratedLook {
   kind: LookKind;
@@ -27,9 +27,19 @@ export interface DescriptionInput {
 }
 
 export const media = {
-  async upload(file: File, max = 1000): Promise<string> {
+  /** Downscales in the browser, then stores it server-side and returns the URL. */
+  async upload(
+    file: File,
+    max = 1000,
+    purpose: 'product' | 'category' | 'banner' | 'offer' = 'product',
+  ): Promise<string> {
     if (!/^image\//.test(file.type)) throw new Error('Please choose an image file');
-    return resizeFile(file, max);
+    const data = await resizeFile(file, max);
+    const { url } = await req<{ url: string }>('/admin/uploads', {
+      method: 'POST',
+      body: { data, purpose },
+    });
+    return url;
   },
 
   async generateLooks(src: string, kinds: LookKind[], count: number): Promise<GeneratedLook[]> {

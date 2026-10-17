@@ -59,7 +59,7 @@ export function AiPhotoStudio({ draft, vi, si, colorLabel, onUse, onClose }: Pro
     e.target.value = '';
     if (!file) return;
     try {
-      setSrc(await media.upload(file, 1200));
+      setSrc(await media.upload(file, 1200, 'product'));
     } catch (err) {
       flash(err instanceof Error ? err.message : 'Could not read that image');
     }

@@ -151,7 +151,7 @@ export function ProductEditor() {
     e.target.value = '';
     if (!file) return;
     try {
-      setImage(vi, si, await media.upload(file, 1000));
+      setImage(vi, si, await media.upload(file, 1000, 'product'));
     } catch (err) {
       flash(err instanceof Error ? err.message : 'Could not read that image');
     }
