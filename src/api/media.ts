@@ -32,12 +32,14 @@ export const media = {
     file: File,
     max = 1000,
     purpose: 'product' | 'category' | 'banner' | 'offer' = 'product',
+    /** What the image is for, so the stored file is recognisable on disk. */
+    name = '',
   ): Promise<string> {
     if (!/^image\//.test(file.type)) throw new Error('Please choose an image file');
     const data = await resizeFile(file, max);
     const { url } = await req<{ url: string }>('/admin/uploads', {
       method: 'POST',
-      body: { data, purpose },
+      body: { data, purpose, name },
     });
     return url;
   },
