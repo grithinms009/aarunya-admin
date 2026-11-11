@@ -12,6 +12,7 @@ import f from '@/styles/form.module.css';
 import { useProductFilters, type ProductFilters } from './useProductFilters';
 import s from './ProductsPage.module.css';
 import type { Product } from '@/data/types';
+import { HsnBadge } from '@/features/gst/HsnBadge';
 import { EmptyState } from '@/components/ui/EmptyState';
 
 const SORTS: [string, string][] = [
@@ -307,6 +308,7 @@ export function ProductsPage() {
                       <span className={s.stack}>
                         <span className={s.name}>{p.name}</span>
                         <span className={s.meta}>{metaText}</span>
+                        <HsnBadge productId={p.id} />
                       </span>
                     </Link>
 

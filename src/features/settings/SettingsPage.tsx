@@ -22,6 +22,14 @@ interface Draft {
   passwordConfirm: string;
 }
 
+const RATE_ZONES = ['home', 'rest', 'remote'] as const;
+const rateToStr = (v: number | '' | null | undefined) => (v === '' || v == null ? '' : String(v));
+/** '' stays '' (use the standard fee); anything else becomes a number, or NaN when invalid. */
+const rateToValue = (v: string): number | '' => {
+  const t = v.trim();
+  return t === '' ? '' : Number(t);
+};
+
 export function SettingsPage() {
   const { dispatchCutoffs } = useReference();
   const qc = useQueryClient();
@@ -48,6 +56,9 @@ export function SettingsPage() {
         INSTAGRAM_HANDLE: c.INSTAGRAM_HANDLE,
         FREE_SHIPPING_THRESHOLD: String(c.FREE_SHIPPING_THRESHOLD),
         SHIPPING_FEE: String(c.SHIPPING_FEE),
+        RATE_home: rateToStr(c.SHIPPING_RATES?.home),
+        RATE_rest: rateToStr(c.SHIPPING_RATES?.rest),
+        RATE_remote: rateToStr(c.SHIPPING_RATES?.remote),
         GIFT_WRAP_FEE: String(c.GIFT_WRAP_FEE),
         DISPATCH_CUTOFF_HOUR: String(c.DISPATCH_CUTOFF_HOUR),
         PAYMENT_PROVIDER: c.PAYMENT_PROVIDER,
@@ -75,9 +86,23 @@ export function SettingsPage() {
   };
 
   const save = async () => {
+    const rateErrors: Record<string, string> = {};
+    const SHIPPING_RATES = { home: '', rest: '', remote: '' } as Record<(typeof RATE_ZONES)[number], number | ''>;
+    for (const z of RATE_ZONES) {
+      const v = rateToValue(String(draft.config[`RATE_${z}`] ?? ''));
+      if (v !== '' && (!Number.isFinite(v) || v < 0)) rateErrors[`RATE_${z}`] = 'Enter a non-negative amount, or leave blank';
+      SHIPPING_RATES[z] = v;
+    }
+    if (Object.keys(rateErrors).length) {
+      setErrors(rateErrors);
+      flash('Please fix the highlighted fields');
+      return;
+    }
     setBusy(true);
     try {
-      await settings.save(draft);
+      const config: Record<string, string | boolean> = { ...draft.config };
+      for (const z of RATE_ZONES) delete config[`RATE_${z}`];
+      await settings.save({ ...draft, config, SHIPPING_RATES });
       setErrors({});
       setDraft({ ...draft, password: '', passwordConfirm: '' });
       setUser({ name: draft.name, email: draft.email });
@@ -172,7 +197,7 @@ export function SettingsPage() {
               />
             </label>
             <label className={f.label}>
-              Shipping fee below that (₹)
+              Standard shipping fee (used where a zone is left blank)
               <input
                 inputMode="numeric"
                 value={String(draft.config.SHIPPING_FEE)}
@@ -180,6 +205,58 @@ export function SettingsPage() {
                 className={f.input}
               />
             </label>
+            <label className={f.label}>
+              Shipping to home state (Kerala) (₹)
+              <input
+                inputMode="decimal"
+                value={String(draft.config.RATE_home ?? '')}
+                onChange={(e) => setConfig('RATE_home', e.target.value)}
+                placeholder={String(draft.config.SHIPPING_FEE)}
+                className={f.input}
+                style={invalid('RATE_home')}
+              />
+              {err('RATE_home') && (
+                <span role="alert" className={f.error}>
+                  {err('RATE_home')}
+                </span>
+              )}
+            </label>
+            <label className={f.label}>
+              Shipping to rest of India (₹)
+              <input
+                inputMode="decimal"
+                value={String(draft.config.RATE_rest ?? '')}
+                onChange={(e) => setConfig('RATE_rest', e.target.value)}
+                placeholder={String(draft.config.SHIPPING_FEE)}
+                className={f.input}
+                style={invalid('RATE_rest')}
+              />
+              {err('RATE_rest') && (
+                <span role="alert" className={f.error}>
+                  {err('RATE_rest')}
+                </span>
+              )}
+            </label>
+            <label className={f.label}>
+              Shipping to remote areas (₹)
+              <input
+                inputMode="decimal"
+                value={String(draft.config.RATE_remote ?? '')}
+                onChange={(e) => setConfig('RATE_remote', e.target.value)}
+                placeholder={String(draft.config.SHIPPING_FEE)}
+                className={f.input}
+                style={invalid('RATE_remote')}
+              />
+              {err('RATE_remote') && (
+                <span role="alert" className={f.error}>
+                  {err('RATE_remote')}
+                </span>
+              )}
+            </label>
+            <p style={{ gridColumn: '1 / -1', margin: 0, fontSize: 12, color: 'var(--ink-muted)' }}>
+              Blank = standard shipping fee. Zone is decided from the delivery PIN code. Remote = J&amp;K, Ladakh, Sikkim,
+              the north-eastern states, Andaman &amp; Nicobar and Lakshadweep.
+            </p>
             <label className={f.label}>
               Gift wrap fee (₹)
               <input

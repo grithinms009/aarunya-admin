@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { RuleError, meta, orders } from '@/api';
+import { ApiError, RuleError, gst, meta, orders } from '@/api';
 import { useReference } from '@/hooks/useReference';
 import { Drawer, Steps, buildSteps } from '@/components/ui/Drawer';
 import { CHANNEL, ORDER_STATUS, PAYMENT_STATUS } from '@/lib/badges';
 import { fDT, inr, plural, waLink } from '@/lib/format';
-import { printInvoice } from '@/lib/invoice';
+import { printReceipt } from '@/lib/invoice';
 import { useUi } from '@/store/useUi';
 import f from '@/styles/form.module.css';
 import d from '@/components/ui/Drawer.module.css';
@@ -28,6 +28,15 @@ export function OrderDrawer({ orderNo }: Props) {
   });
   const { data: config } = useQuery({ queryKey: ['config'], queryFn: meta.config });
   const { data: colors = {} } = useQuery({ queryKey: ['colors'], queryFn: meta.colors });
+
+  /* The order's live tax invoice, if one has been issued. The server's search is a
+     substring match, so pick the exact order. */
+  const { data: taxInvoice, isLoading: invLoading } = useQuery({
+    queryKey: ['gst-order-invoice', orderNo],
+    queryFn: async () =>
+      (await gst.invoices({ q: orderNo, status: 'issued' })).rows.find((r) => r.orderId === orderNo) ?? null,
+    retry: false,
+  });
 
   const [courier, setCourier] = useState('');
   const [awb, setAwb] = useState('');
@@ -134,14 +143,33 @@ export function OrderDrawer({ orderNo }: Props) {
           <button
             type="button"
             onClick={() => {
-              if (!printInvoice(order, config, colorLabel)) {
-                flash('Allow pop-ups to print the invoice');
+              if (!printReceipt(order, config, colorLabel)) {
+                flash('Allow pop-ups to print the receipt');
               }
             }}
             className={d.footBtn}
           >
-            Print invoice
+            Print order receipt
           </button>
+          {taxInvoice ? (
+            <button
+              type="button"
+              onClick={() =>
+                void gst.openInvoicePdf(taxInvoice.id).catch((e: unknown) =>
+                  flash(e instanceof ApiError ? e.message : 'Could not open the tax invoice'),
+                )
+              }
+              className={d.footBtn}
+            >
+              Download tax invoice
+            </button>
+          ) : (
+            !invLoading && (
+              <span className={d.payText} style={{ alignSelf: 'center' }}>
+                Tax invoice is issued when the order is dispatched
+              </span>
+            )
+          )}
           {canCancel && (
             <button
               type="button"

@@ -13,6 +13,9 @@ import { ReturnsPage } from '@/features/returns/ReturnsPage';
 import { StorefrontPage } from '@/features/storefront/StorefrontPage';
 import { CustomersPage } from '@/features/customers/CustomersPage';
 import { SettingsPage } from '@/features/settings/SettingsPage';
+import { GstSettingsPage } from '@/features/gst/GstSettingsPage';
+import { ProductHsnPage } from '@/features/gst/ProductHsnPage';
+import { InvoicesPage } from '@/features/gst/InvoicesPage';
 import { RequireAuth } from '@/app/RequireAuth';
 import { useAuth } from '@/store/useAuth';
 
@@ -52,6 +55,10 @@ export default function App() {
         <Route path="/inventory" element={<InventoryPage />} />
         <Route path="/storefront" element={<StorefrontPage />} />
         <Route path="/customers" element={<CustomersPage />} />
+        <Route path="/gst" element={<Navigate to="/gst/settings" replace />} />
+        <Route path="/gst/settings" element={<GstSettingsPage />} />
+        <Route path="/gst/products" element={<ProductHsnPage />} />
+        <Route path="/gst/invoices" element={<InvoicesPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Route>

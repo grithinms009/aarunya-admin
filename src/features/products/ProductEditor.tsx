@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ValidationError, media, meta, products } from '@/api';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { HsnBadge } from '@/features/gst/HsnBadge';
 import { Switch } from '@/components/ui/controls';
 import { PATH } from '@/components/ui/icons';
 import { useViewport } from '@/hooks/useViewport';
@@ -229,6 +230,12 @@ export function ProductEditor() {
           },
         ]}
       />
+
+      {!draft.isNew && (
+        <div style={{ marginBottom: 12 }}>
+          <HsnBadge productId={draft.id} />
+        </div>
+      )}
 
       <div
         className={s.grid}

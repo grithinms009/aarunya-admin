@@ -59,3 +59,8 @@ export const waLink = (phone: string | undefined, text = ''): string => {
   if (p.length === 10) p = '91' + p;
   return p ? `https://wa.me/${p}?text=${encodeURIComponent(text)}` : '';
 };
+
+/** Integer paise → "₹1,234.50". Display only; the server does all tax arithmetic. */
+export const inrPaise = (paise: unknown): string =>
+  '₹' +
+  (num(paise) / 100).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });

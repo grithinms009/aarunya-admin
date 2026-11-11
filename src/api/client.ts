@@ -102,3 +102,18 @@ export async function download(path: string, query: Query, filename: string): Pr
   a.click();
   URL.revokeObjectURL(url);
 }
+
+/** Fetches a binary (e.g. a PDF) through the session cookie. */
+export async function fetchBlob(path: string): Promise<Blob> {
+  let res: Response;
+  try {
+    res = await fetch(BASE + path, { credentials: 'include' });
+  } catch {
+    throw new ApiError('Could not reach the server. Check your connection.', 'network');
+  }
+  if (!res.ok) {
+    const data = safeJson(await res.text()) as { message?: string } | null;
+    throw new ApiError(data?.message ?? 'Could not fetch the document', 'error', undefined, res.status);
+  }
+  return res.blob();
+}

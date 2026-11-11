@@ -1,10 +1,9 @@
-/* Printable invoice. The backend will render this server-side at
-   GET /api/admin/orders/{orderNo}/invoice; until then it is built and printed here,
-   from the same order data. */
+/* Printable order receipt. NOT a tax invoice: it makes no tax claims. Tax invoices are
+   issued by the server (GST & Invoices) and downloaded as PDFs. */
 import { fDT, inr } from './format';
 import type { Config, Order } from '@/data/types';
 
-export function printInvoice(
+export function printReceipt(
   o: Order,
   config: Config,
   colorLabel: (key: string) => string,
@@ -34,7 +33,7 @@ export function printInvoice(
     ? `<br>${o.customer.address}, ${o.customer.city}, ${o.customer.state} ${o.customer.pin}`
     : '';
 
-  w.document.write(`<!doctype html><html><head><title>Invoice ${o.id}</title><style>
+  w.document.write(`<!doctype html><html><head><title>Order receipt ${o.id}</title><style>
 body{font-family:Georgia,serif;color:#1E2125;max-width:720px;margin:40px auto;padding:0 24px}
 h1{font-weight:500;margin:0}
 table{width:100%;border-collapse:collapse;margin-top:24px;font-family:Arial,sans-serif;font-size:13px}
@@ -47,7 +46,7 @@ small{color:#6B7178}
 </style></head><body>
 <h1>Aarunya Jewels by Veena</h1>
 <p class="m">${config.EMAIL} · +${config.WHATSAPP_NUMBER}</p>
-<p class="m"><b>Invoice ${o.id}</b> · ${fDT(o.createdAt)}<br>${
+<p class="m"><b>Order receipt \u2014 not a tax invoice</b><br><b>Order ${o.id}</b> · ${fDT(o.createdAt)}<br>${
     o.customer.name || 'Walk-in customer'
   }${o.customer.phone ? ' · ' + o.customer.phone : ''}${address}</p>
 <table><tr><th>Item</th><th>Qty</th><th>Price</th><th>Total</th></tr>
@@ -55,7 +54,7 @@ ${rows}
 <tr><td colspan="3">Subtotal</td><td>${inr(o.subtotal)}</td></tr>
 ${extra}
 <tr class="t"><td colspan="3">Total</td><td>${inr(o.total)}</td></tr></table>
-<p class="m">Paid by ${o.payment.method || '—'}. Prices include all taxes.</p>
+<p class="m">Paid by ${o.payment.method || '—'}.</p>
 </body></html>`);
   w.document.close();
   w.focus();

@@ -237,6 +237,8 @@ export interface Config {
   EMAIL: string;
   FREE_SHIPPING_THRESHOLD: number;
   SHIPPING_FEE: number;
+  /** Per-zone rupee rates by delivery PIN; '' = use SHIPPING_FEE. */
+  SHIPPING_RATES?: { home: number | ''; rest: number | ''; remote: number | '' };
   GIFT_WRAP_FEE: number;
   DISPATCH_CUTOFF_HOUR: number;
   PAYMENT_PROVIDER: 'razorpay' | 'cashfree';

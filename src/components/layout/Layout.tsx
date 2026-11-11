@@ -13,7 +13,7 @@ import s from './Layout.module.css';
 type NavKey = keyof typeof NAV_ICON;
 type BadgeKey = 'orders' | 'returns' | 'inventory';
 
-const GROUPS: { title: string; items: [NavKey, string][] }[] = [
+const GROUPS: { title: string; items: [NavKey, string, string?][] }[] = [
   { title: 'Overview', items: [['dashboard', 'Dashboard']] },
   {
     title: 'Sales',
@@ -29,6 +29,14 @@ const GROUPS: { title: string; items: [NavKey, string][] }[] = [
       ['products', 'Products'],
       ['categories', 'Categories'],
       ['inventory', 'Inventory'],
+    ],
+  },
+  {
+    title: 'GST & Invoices',
+    items: [
+      ['gstSettings', 'GST Settings', '/gst/settings'],
+      ['hsn', 'Product HSN', '/gst/products'],
+      ['invoices', 'Invoices', '/gst/invoices'],
     ],
   },
   {
@@ -125,12 +133,12 @@ export function Layout() {
             {GROUPS.map((g) => (
               <div key={g.title} className={s.group}>
                 <span className={s.groupTitle}>{g.title}</span>
-                {g.items.map(([key, label]) => {
+                {g.items.map(([key, label, to]) => {
                   const n = badges?.[key as BadgeKey] ?? 0;
                   return (
                     <NavLink
                       key={key}
-                      to={`/${key}`}
+                      to={to ?? `/${key}`}
                       className={({ isActive }) => `${s.item} ${isActive ? s.itemOn : ''}`}
                     >
                       {({ isActive }) => (

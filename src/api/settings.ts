@@ -13,6 +13,8 @@ export interface SettingsPayload {
 
 export interface SettingsDraftInput {
   config: Record<string, string | boolean>;
+  /** Per-zone shipping rates in rupees; '' = use the standard fee. Sent inside config. */
+  SHIPPING_RATES?: Record<'home' | 'rest' | 'remote', number | ''>;
   couriers: Courier[];
   locations: string[];
   colors: { key: string; label: string; hex: string }[];
@@ -36,7 +38,7 @@ export const settings = {
 
   save: async (input: SettingsDraftInput): Promise<void> => {
     try {
-      await req('/admin/settings', { method: 'PUT', body: input });
+      await req('/admin/settings', { method: 'PUT', body: { ...input, config: { ...input.config, SHIPPING_RATES: input.SHIPPING_RATES } } });
     } catch (e) {
       if (e instanceof ApiError && e.fields) throw new SettingsValidationError(e.fields);
       throw e;
